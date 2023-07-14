@@ -23,29 +23,6 @@ apartment = int(input())
 print("Введите ключ: ", end = "") # выводи сообщение без новой строки 
 key = input()
 
-def panel_office():
-    
-    ipaddres_office = "10.85.200.144"
-    url = protocol + ipaddres_office + metod
-
-    payload = json.dumps({
-    "uuid": key,
-    "panelCode": apartment,
-    "encryption": bool_encryption,
-    
-    })
-    headers = {
-    'Content-Type': 'application/json',
-    'Authorization': Authorization
-    }
-
-    response = requests.request("POST", url, headers=headers, data=payload)
-
-    if response: print("OK - ключ добавлен")
-    else: print(response.status_code);print(response.text)
-
-panel_office()
-
 def kalitka_1():       # Калитка 1 \ http://10.85.171.8 \ root \ 51689f7a3e \ 08:13:CD:00:07:D0
 
     ipaddres_tep_klaitka_1 = "10.85.171.8"
@@ -112,8 +89,14 @@ def kalitka_3():        # Калитка 3 \ http://10.85.171.7 \ root \ 51689f7
     if response: print("OK - ключ добавлен - калитка 3")
     else: print(response.status_code);print(response.text)
 
-# kalitka_1()
+kalitka_1()
 
-# kalitka_2()
+kalitka_2()
 
-# kalitka_3()
+kalitka_3()
+
+
+
+
+
+
