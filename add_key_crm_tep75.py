@@ -25,19 +25,16 @@ num_entrance = str() # Номер подезда
 
 num_home = int()
 
-url = f"https://crm.dtel.ru/front/device-keys/{mac}/create-key"
+# url = f"https://crm.dtel.ru/front/device-keys/{mac}/create-key"
 Cookie = "PHPSESSID_TD_CRM=65r54f5l3r6ne8hpvsmfh27js3; _csrf=11319b03dd44ab191f63862cf53eb348ea36d7e773bb47d99df5f539ce7169e8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22pN_pI8mSdIOpNKkEcMUyRxD2VbNMfWPH%22%3B%7D; _identity=f236f7e09617f4beaf7878357688d69d7be7640c15935b049ca5fb38014c009da%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_identity%22%3Bi%3A1%3Bs%3A17%3A%22%5B20%2Cnull%2C2592000%5D%22%3B%7D"
 
 #----ввод-данных-----------------------------------------------
 
 print(list_home) # выводи сообщение без новой строки 
-num_home = int(input())
+num_home = int(1)        # num_home = int(input())
 
 print("Введите номер квартиры: ", end = "") # выводи сообщение без новой строки 
 apartment = input()
-
-# print("Введите ключ: ", end = "") # выводи сообщение без новой строки 
-# key = input()
 
 def gates_1():
 
@@ -58,8 +55,8 @@ def gates_1():
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    if response: print(f"OK - ключ добавлен - калитка 1 - {key}")
-    else: print(response.status_code);print(response.text)
+    if "true" in response.text: print(f"OK - ключ добавлен - калитка 1 - {key}")
+    else: print(response.status_code);print(response.text, " - калитка 1")
 
 def gates_2():
 
@@ -80,8 +77,8 @@ def gates_2():
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    if response: print(f"OK - ключ добавлен - калитка 2 - {key}")
-    else: print(response.status_code);print(response.text)
+    if "true" in response.text: print(f"OK - ключ добавлен - калитка 2 - {key}")
+    else: print(response.status_code);print(response.text, " - калитка 2")
 
 def gates_3():
 
@@ -102,8 +99,8 @@ def gates_3():
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    if response: print(f"OK - ключ добавлен - калитка 3 - {key}")
-    else: print(response.status_code);print(response.text)
+    if "true" in response.text: print(f"OK - ключ добавлен - калитка 3 - {key}")
+    else: print(response.status_code);print(response.text, " - калитка 3")
 
 def entrance_1_75():
     
@@ -123,8 +120,8 @@ def entrance_1_75():
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    if response: print(f"OK - ключ добавлен - Дом 75 - подезд 1 - {key}")
-    else: print(response.status_code);print(response.text)
+    if "true" in response.text: print(f"OK - ключ добавлен - Дом 75 - подезд 1 - {key}")
+    else: print(response.status_code);print(response.text, " - 75 под. 1")
 
 def entrance_2_75():
     
@@ -144,8 +141,8 @@ def entrance_2_75():
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    if response: print(f"OK - ключ добавлен - Дом 75 - подезд - 2 - {key}")
-    else: print(response.status_code);print(response.text)
+    if "true" in response.text: print(f"OK - ключ добавлен - Дом 75 - подезд - 2 - {key}")
+    else: print(response.status_code);print(response.text, "75 под. 2")
 
 def entrance_1_75_1():
     
@@ -165,8 +162,8 @@ def entrance_1_75_1():
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    if response: print(f"OK - ключ добавлен - Дом 75/1 - подезд 1 - {key}")
-    else: print(response.status_code);print(response.text)
+    if "true" in response.text: print(f"OK - ключ добавлен - Дом 75/1 - подезд 1 - {key}")
+    else: print(response.status_code);print(response.text, "75/1 под. 1")
 
 def entrance_2_75_2():
     
@@ -186,15 +183,15 @@ def entrance_2_75_2():
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    if response: print(f"OK - ключ добавлен - Дом 75/1 - подезд 2 - {key}")
-    else: print(response.status_code);print(response.text)
+    if "true" in response.text: print(f"OK - ключ добавлен - Дом 75/1 - подезд 2 - {key}") 
+    else: print(response.status_code);print(response.text, "75/1 под. 2")
 
 
 for key in file:
 
-    # gates_1()
-    # gates_2()
-    # gates_3()
+    gates_1()
+    gates_2()
+    gates_3()
 
     apartment = int(apartment)
 
