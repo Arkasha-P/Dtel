@@ -1,14 +1,20 @@
-import requests
 import logging
-import re
+import requests
+import os
+os.system('cls')
+
+logging.basicConfig(level=logging.INFO)
+
+filename = "log.txt"
+
+pattern = "UART_EV_PASS_OPEN"
+# pattern = "is not present in database"
 
 
+new_string = pattern
 
 url = "http://10.85.200.144/v2/logs/all"
-# url = "http://10.85.200.144/log/last"
 
-target_string = f"is not present in database"
-file_path = r'C:\Users\sever\Documents\api_sokol\log.txt'
 logging.basicConfig(level=logging.INFO)
 
 payload = ""
@@ -20,38 +26,36 @@ headers = {
 
 response = requests.request("GET", url, headers=headers, data=payload)
 
-    # RFID 000000696BBAFB is not present in database
-
 log = response.text
 
-target_string = f"is not present in database"
+app = []
 
-def check_string_in_log(log, target_string):
-    lines = log.split("\n")  # Разделить лог на строки
-    for line in lines:
-        if re.search(re.escape(target_string), line):
-             # Возвращаем полностью найденную строку без пробельных символов в начале и конце
-            return(line.strip())
-
-line = check_string_in_log(response.text, target_string)
-filename = "log.txt"
-pattern = line
-new_string = line
-
-# Функция для поиска строки в файле
-def search_and_add_string(filename, pattern, new_string):
-    # Открываем файл для чтения и записи
-    with open(filename, 'r+') as file:
-        # Читаем содержимое файла
-        content = file.read()
+def check_string_in_log(log, pattern): # сравнивает по шаблону текст лога и выводит найденные строки
+  lines = log.split("\n")  # Разделить лог на строки
+  for line in lines:
+      if pattern in line:
+          # print("Найдены совподения: " + line)
+          app.append(line)
+  return(f"\n".join(app))
         
-        # Проверяем, найдено ли совпадение с шаблоном
-        if re.search(re.escape(pattern), content):
-            print("Такая строка уже существует в файле.")
-        else:
-            new_string = "\n" + new_string
-            # Добавляем новую строку в файл
-            file.write(new_string)
-            print(f"Строка '{new_string.strip()}' добавлена в файл.")
+app = check_string_in_log(log, pattern)
+app = app.split("\n")
 
-search_and_add_string(filename, pattern, new_string)
+with open("log.txt", "r+") as f:
+    file = f.readlines()
+
+file = f"\n".join(file)
+
+
+
+my_list = app
+my_string = file
+
+for app in app:
+  if app in file:
+      print("Строка найдена в списке")
+  else:
+      print("Строка не найдена в списке")
+      with open('log.txt', 'a') as f:
+        f.write(f"{app}\n")
+      print(f"Строка '{app.strip()}' добавлена в файл.")
