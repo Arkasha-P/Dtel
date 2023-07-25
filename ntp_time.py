@@ -23,7 +23,7 @@ ip_panel_office =           "10.85.200.144"
 ip = [
       ip_tep75_gates_1,
       ip_tep75_gates_2,
-      #ip_tep75_gates_3,
+      ip_tep75_gates_3,
       ip_tep75_entrance_1,
       ip_tep75_entrance_2,
       ip_tep75_1_entrance_1,

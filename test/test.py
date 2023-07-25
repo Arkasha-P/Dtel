@@ -5,8 +5,10 @@ os.system('cls')
 
 logging.basicConfig(level=logging.INFO)
 
-# pattern = "UART_EV_PASS_OPEN"
-pattern = "is not present in database"
+filename = "log.txt"
+
+pattern = "UART_EV_PASS_OPEN"
+# pattern = "is not present in database"
 
 
 new_string = pattern
@@ -39,18 +41,19 @@ def check_string_in_log(log, pattern): # сравнивает по шаблон�
 app = check_string_in_log(log, pattern)
 app = app.split("\n")
 
-if app == ['']: print("да и похуй")
-
 with open("log.txt", "r+") as f:
     file = f.readlines()
 
 file = f"\n".join(file)
 
 
+
+my_list = app
+my_string = file
+
 for app in app:
   if app in file:
       print("Строка найдена в списке")
-      print(app)
   else:
       print("Строка не найдена в списке")
       with open('log.txt', 'a') as f:

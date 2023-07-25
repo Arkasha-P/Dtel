@@ -31,7 +31,7 @@ Cookie = "PHPSESSID_TD_CRM=65r54f5l3r6ne8hpvsmfh27js3; _csrf=11319b03dd44ab191f6
 #----ввод-данных-----------------------------------------------
 
 print(list_home) # выводи сообщение без новой строки 
-num_home = int(1)        # num_home = int(input())
+num_home = int(input())
 
 print("Введите номер квартиры: ", end = "") # выводи сообщение без новой строки 
 apartment = input()
