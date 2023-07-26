@@ -24,7 +24,7 @@ mac_panel_office = "08:13:CD:00:06:C4"
 
 mac = str()
 key = str()
-file = open('keys.txt', 'r')
+file = open('txt\keys.txt', 'r')
 apartment = str()
 num_entrance = str() # Номер подезда
 
