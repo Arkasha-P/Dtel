@@ -1,11 +1,9 @@
 import requests
 import json
-from db.sql import *
+from db import *
 
 #---Переменные-------------------------------------------------
 ip = get_all_ip()
-
-print(ip)
 
 headers = {
   'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 import requests
 import json
 
+
 #---Переменные-------------------------------------------------
 
 mac_tep75_gates_1 = "08:13:CD:00:07:D0" 
@@ -19,7 +20,7 @@ list_home = """Выберете дом (введите номер строки):
 
 mac = str()
 key = str()
-file = open('keys.txt', 'r')
+file = open(r'C:\Users\sever\Documents\api_sokol\txt\keys.txt', 'r')
 apartment = str()
 num_entrance = str() # Номер подезда
 

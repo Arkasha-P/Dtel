@@ -280,7 +280,7 @@ async def main():
                         office_panel(),
                         gates_1(),
                         gates_2(),
-                        # gates_3(),
+                        gates_3(),
                         entrance_1_75(),
                         entrance_2_75(),
                         entrance_1_75_1(),

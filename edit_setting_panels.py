@@ -1,38 +1,41 @@
 import requests
 import json
+from db import get_all_ip
 
 #---Переменные-------------------------------------------------
 
-ip_tep75_gates_1 =          "10.85.171.8" 
-ip_tep75_gates_2 =          "10.85.171.6"
-ip_tep75_gates_3 =          "10.85.171.7"
+# ip_tep75_gates_1 =          "10.85.171.8" 
+# ip_tep75_gates_2 =          "10.85.171.6"
+# ip_tep75_gates_3 =          "10.85.171.7"
 
-ip_tep75_entrance_1 =       "10.85.171.3"
-ip_tep75_entrance_2 =       "10.85.171.2"
+# ip_tep75_entrance_1 =       "10.85.171.3"
+# ip_tep75_entrance_2 =       "10.85.171.2"
 
-ip_tep75_1_entrance_1 =     "10.85.171.4"
-ip_tep75_1_entrance_2 =     "10.85.171.5"
+# ip_tep75_1_entrance_1 =     "10.85.171.4"
+# ip_tep75_1_entrance_2 =     "10.85.171.5"
 
-ip_gai5_5_entrance_1 =      "10.87.180.2"
+# ip_gai5_5_entrance_1 =      "10.87.180.2"
 
-ip_vin22_1_entrance_1 =     "10.85.249.250"
-ip_vin22_1_entrance_2 =     "10.85.249.251"
+# ip_vin22_1_entrance_1 =     "10.85.249.250"
+# ip_vin22_1_entrance_2 =     "10.85.249.251"
 
-ip_panel_office =           "10.85.200.144"
+# ip_panel_office =           "10.85.200.144"
 
-ip = [
-      # ip_tep75_gates_1,
-      # ip_tep75_gates_2,
-      # ip_tep75_gates_3,
-      # ip_tep75_entrance_1,
-      # ip_tep75_entrance_2,
-      # ip_tep75_1_entrance_1,
-      # ip_tep75_1_entrance_2,
-      ip_gai5_5_entrance_1,
-      # ip_vin22_1_entrance_1,
-      # ip_vin22_1_entrance_2,
-      # ip_panel_office
-      ]
+ip = get_all_ip()
+
+# ip = [
+#       # ip_tep75_gates_1,
+#       # ip_tep75_gates_2,
+#       # ip_tep75_gates_3,
+#       # ip_tep75_entrance_1,
+#       # ip_tep75_entrance_2,
+#       # ip_tep75_1_entrance_1,
+#       # ip_tep75_1_entrance_2,
+#       ip_gai5_5_entrance_1,
+#       # ip_vin22_1_entrance_1,
+#       # ip_vin22_1_entrance_2,
+#       # ip_panel_office
+#       ]
 
 headers = {
   'Content-Type': 'application/json',
