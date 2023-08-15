@@ -20,7 +20,7 @@ list_home = """Выберете дом (введите номер строки):
 
 mac = str()
 key = str()
-file = open(r'C:\Users\sever\Documents\api_sokol\txt\keys.txt', 'r')
+file = open(r'txt/keys.txt', 'r')
 apartment = str()
 num_entrance = str() # Номер подезда
 
