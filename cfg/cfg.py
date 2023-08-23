@@ -12,3 +12,5 @@ def print_output(response, key):
     else: 
         print_output = f"{response.status_code} {response.text}"
     return print(print_output)
+
+file = open(r'txt/keys.txt', 'r')

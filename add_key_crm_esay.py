@@ -2,6 +2,7 @@ import requests
 import json
 from cfg.cfg import headers_crm, print_output
 
+
 #---Переменные-------------------------------------------------
 
 key = open(r'C:\Users\sever\Documents\api_sokol\txt\keys.txt', 'r')
