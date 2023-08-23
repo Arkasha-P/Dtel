@@ -3,11 +3,11 @@ import requests
 import json
 
 
-file = f"/home/ubu/Рабочий стол/На выдачу Тепличная 79 (копия).csv"
+file = f"/home/ubu/Рабочий стол/users.csv"
 
 list_id = []
 
-fias = "7e0602ba-eea5-4ed7-93d3-5b11bae19463"
+fias = "a824de89-3444-483a-ada3-25df7bc67a5d"
 
 user_id = open(r'txt/user_id.txt', 'r')
 
