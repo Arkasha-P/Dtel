@@ -3,7 +3,7 @@ import json
 import time
 
 address = "Сочи, ул. Тепличная дом 79 подъезд 4"
-ip_panels = "192.168.10.161"
+ip_panels = "192.168.10.107"
 ip_server_tftp = "192.168.10.247"
 
 
@@ -266,7 +266,7 @@ def add_code_23123_apartament_999():
 
     payload = json.dumps({
     "code": 23123,
-    "panelCode": 999
+    "panelCode": 0
 })
 
     headers = {
@@ -284,7 +284,7 @@ def add_code_96369_apartament_999():
 
     payload = json.dumps({
     "code": 96369,
-    "panelCode": 999
+    "panelCode": 0
 })
 
     headers = {
@@ -325,15 +325,15 @@ def add_key_ois_apartament_999():
 
 
 # update_stage1()
-# update_stage2()
-update_config_rsyslogd()
-update_time_zone()
-off_W_B_mode()
-add_label_address()
-update_5sec_open()
-turn_on_aac()
-turn_off_echoD()
-add_apartament_999()
-add_code_23123_apartament_999()
-add_code_96369_apartament_999()
-add_key_ois_apartament_999()
+update_stage2()
+# update_config_rsyslogd()
+# update_time_zone()
+# off_W_B_mode()
+# add_label_address()
+# update_5sec_open()
+# turn_on_aac()
+# turn_off_echoD()
+# add_apartament_999()
+# add_code_23123_apartament_999()
+# add_code_96369_apartament_999()
+# add_key_ois_apartament_999()

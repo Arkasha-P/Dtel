@@ -1,8 +1,12 @@
+"""
+Добавление пользователей в CRM через файл .csv
+"""
+
 import csv
 import requests
 import json
 
-file = f"/home/ubu/Рабочий стол/users.csv"
+file = f"txt/users.csv"
 
 list_id = []
 
@@ -27,8 +31,12 @@ def add_user_crm(user, password):
 
     response = response.json()
 
-    list_id.append(response['newUserId'])
+    print(response)
 
+    print(response['newUserId'])
+
+    list_id.append(response['newUserId'])
+    
     print(user, password)
 
     return list_id
