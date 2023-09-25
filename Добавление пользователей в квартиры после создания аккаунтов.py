@@ -1,6 +1,7 @@
 '''
 Добавление пользователей в квартиры после создания аккаунтов
 '''
+from db.mysql import get_houseuid_address
 import csv
 import requests
 import json
@@ -10,7 +11,11 @@ file = f"/home/ubu/Рабочий стол/users.csv"
 
 list_id = []
 
-fias = "7e0602ba-eea5-4ed7-93d3-5b11bae19463"
+street = get_houseuid_address()
+
+
+
+fias = ""
 
 user_id = open(r'txt/user_id.txt', 'r')
 
@@ -43,3 +48,31 @@ for apartment_list in apartment:
 
 with open(r'txt/user_id.txt', 'w') as f:
     f = ""
+
+
+
+'''
+Добавление пользователей в квартиры после создания аккаунтов
+'''
+
+
+"""
+API  обновление пользователей
+https://core.is74.ru/api/v1/mb/user/sync/all
+
+POST
+
+Payload
+{
+    "date_create": "2023-09-17T15:33"
+}
+
+
+API на добавление пользователей
+
+https://web-core.is74.ru/bundles/grouping/users/
+
+POST
+
+
+"""

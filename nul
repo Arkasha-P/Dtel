@@ -1,0 +1,8 @@
+PING 10.85.200.144 (10.85.200.144) 56(84) bytes of data.
+64 bytes from 10.85.200.144: icmp_seq=1 ttl=62 time=1.35 ms
+64 bytes from 10.85.200.144: icmp_seq=2 ttl=62 time=1.72 ms
+64 bytes from 10.85.200.144: icmp_seq=3 ttl=62 time=1.64 ms
+
+--- 10.85.200.144 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2004ms
+rtt min/avg/max/mdev = 1.353/1.570/1.719/0.157 ms

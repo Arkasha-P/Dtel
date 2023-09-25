@@ -1,19 +1,33 @@
 import requests
 import json
 import time
+import sys
 
-address = "Сочи, ул. Тепличная дом 79 подъезд 4"
-ip_panels = "192.168.10.107"
+address = "Сочи, ул. Тепличная 79 калитка 1"
+ip_panels = "192.168.10.119"
 ip_server_tftp = "192.168.10.247"
+url_update = "http://iscom.hues.top/X2/2.2.5.10.5"
+
+keys_ois = [
+"A3D8E16A",
+"A3C76A8A",
+"A3C8882A",
+"FB13DEF7",
+"FB33F587",
+"6991FEAB",
+"A3CB30AA",
+"6984badb"
+]
 
 
 def update_stage1():
 
+    print("Обновление 1 этапа начато")
     url = f"http://{ip_panels}:8080/system/cam/upgrade"
 
     payload = json.dumps({
     "server": ip_server_tftp,
-    "folder": "/2.5.7.18",
+    "folder": "/2.5.7.23",
     "opt": True,
     "stm": True,
     "rootfs": True,
@@ -21,14 +35,24 @@ def update_stage1():
     })
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': 'Basic cm9vdDoxMjM0NTY=',
+    'Cookie': 'PHPSESSID_TD_CRM=2ahncopu8d7878uv27p4bbmf99; _csrf=1a9b481a5e475988b41f5991c53739baf868885bb45cabe18e7b0f73f2d7810ca%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22gAY7alUi94lMxQxuacbWQeabjrBqpZjO%22%3B%7D; _identity=f236f7e09617f4beaf7878357688d69d7be7640c15935b049ca5fb38014c009da%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_identity%22%3Bi%3A1%3Bs%3A17%3A%22%5B20%2Cnull%2C2592000%5D%22%3B%7D'
     }
 
     response = requests.request("PUT", url, headers=headers, data=payload)
 
-    print(response.text)
+    print(response)
 
-    time.sleep(180)
+
+    
+
+    for remaining in range(180, 0, -1):
+        sys.stdout.write("\r")
+        sys.stdout.write("{:d} seconds remaining.".format(remaining))
+        sys.stdout.flush()
+        time.sleep(1)
+
+    sys.stdout.write("\rComplete!            \n")
     print("Обновление 1 этапа завершино")
 
 def update_stage2():
@@ -36,7 +60,7 @@ def update_stage2():
     url = f"http://{ip_panels}/v2/system/upgrade"
 
     payload = json.dumps({
-    "url": "http://iscom.hues.top/X2/2.2.5.8.10",
+    "url": url_update,
     "opt": True,
     "media": True,
     "rootfs": True,
@@ -51,7 +75,14 @@ def update_stage2():
 
     print(response.text)
 
-    time.sleep(180)
+    for remaining in range(180, 0, -1):
+        sys.stdout.write("\r")
+        sys.stdout.write("{:d} seconds remaining.".format(remaining))
+        sys.stdout.flush()
+        time.sleep(1)
+
+    sys.stdout.write("\rComplete!            \n")
+
     print("Обновление 2 этапа завершино")
 
 def update_config_rsyslogd():
@@ -59,7 +90,7 @@ def update_config_rsyslogd():
 
     url = f"http://{ip_panels}/system/files/rsyslogd.conf"
 
-    payload = "### TEMPLATES ###\ntemplate(name=\"LongTagForwardFormat\" type=\"list\") {\n    constant(value=\"<\")\n    property(name=\"pri\")\n    constant(value=\">\")\n    property(name=\"timestamp\" dateFormat=\"rfc3339\")\n    constant(value=\" \")\n    property(name=\"hostname\")\n    constant(value=\" \")\n    property(name=\"syslogtag\" position.from=\"1\" position.to=\"32\")\n    property(name=\"msg\" spifno1stsp=\"on\" )\n    property(name=\"msg\")\n    constant(value=\"\\n\")\n}\n\ntemplate (name=\"ProxyForwardFormat\" type=\"string\"\n    string=\"<%PRI%>1 %TIMESTAMP:::date-rfc3339% %FROMHOST-IP% %APP-NAME% %HOSTNAME% - -%msg%\")\n\n\n###RULES ####\n\n*.*;cron.none     /tmp/syslog.log;LongTagForwardFormat\n*.*;cron.none     @91.210.24.5:1514;ProxyForwardFormat\n*.*;cron.none     @crm.dtel.ru:1514;LongTagForwardFormat"
+    payload = "### TEMPLATES ###\ntemplate(name=\"LongTagForwardFormat\" type=\"list\") {\n    constant(value=\"<\")\n    property(name=\"pri\")\n    constant(value=\">\")\n    property(name=\"timestamp\" dateFormat=\"rfc3339\")\n    constant(value=\" \")\n    property(name=\"hostname\")\n    constant(value=\" \")\n    property(name=\"syslogtag\" position.from=\"1\" position.to=\"32\")\n    property(name=\"msg\" spifno1stsp=\"on\" )\n    property(name=\"msg\")\n    constant(value=\"\\n\")\n}\n\ntemplate (name=\"ProxyForwardFormat\" type=\"string\"\n    string=\"<%PRI%>1 %TIMESTAMP:::date-rfc3339% %FROMHOST-IP% %APP-NAME% %HOSTNAME% - -%msg%\")\n\n\n###RULES ####\n\n*.*;cron.none     /tmp/syslog.log;LongTagForwardFormat\n*.*;cron.none     @91.210.24.5:1514;ProxyForwardFormat\n*.*;cron.none     @crm.dtel.ru:1514;LongTagForwardFormat\n*.*;cron.none     @loganalyzer.dtel.ru:1514"
     headers = {
     'Content-Type': 'text/plain',
     'Authorization': 'Basic cm9vdDoxMjM0NTY='
@@ -239,12 +270,12 @@ def turn_off_echoD():
 
     print(response.text)
 
-def add_apartament_999():
+def add_apartament_998():
 
     url = f"http://{ip_panels}:8080/panelCode"
 
     payload = json.dumps({
-    "panelCode": 999,
+    "panelCode": 998,
     "callsEnabled": {
         "handset": True,
         "sip": True
@@ -260,7 +291,7 @@ def add_apartament_999():
 
     print(response.text)
 
-def add_code_23123_apartament_999():
+def add_code_23123_apartament_0():
 
     url = f"http://{ip_panels}/openCode"
 
@@ -278,7 +309,7 @@ def add_code_23123_apartament_999():
 
     print(response.text)
 
-def add_code_96369_apartament_999():
+def add_code_96369_apartament_0():
 
     url = f"http://{ip_panels}/openCode"
 
@@ -296,12 +327,14 @@ def add_code_96369_apartament_999():
 
     print(response.text)
 
-def add_key_ois_apartament_999():
+def add_key_ois_apartament_998():
 
     with open(r"txt/keys_ois.txt", "r") as f:
         file = f.read().splitlines()
 
-    for list_file in file:
+    
+
+    for list_file in keys_ois:
 
         print(list_file)
 
@@ -309,7 +342,7 @@ def add_key_ois_apartament_999():
 
         payload = json.dumps({
         "uuid": list_file,
-        "panelCode": 999,
+        "panelCode": 998,
         "encryption":False
         })
 
@@ -322,18 +355,43 @@ def add_key_ois_apartament_999():
 
         print(response.text)
 
+def off_ddns():
+    url = f"http://{ip_panels}/v1/ddns"
+
+    payload = json.dumps({
+    "enabled": False,
+    "interval": 300,
+    "server": {
+    "port": 8081,
+    "address": "10.199.63.7",
+    "username": "default",
+    "password": "default"
+    },
+    "data": {
+    "hostname": "ddns.ISCom"
+    }
+    })
+    headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    }
+
+    response = requests.request("PUT", url, headers=headers, data=payload)
+
+    print(response.text)
 
 
-update_stage1()
-update_stage2()
+# update_stage1()
+# update_stage2()
 update_config_rsyslogd()
+off_ddns()
 update_time_zone()
 off_W_B_mode()
 add_label_address()
 update_5sec_open()
 turn_on_aac()
 turn_off_echoD()
-add_apartament_999()
-add_code_23123_apartament_999()
-add_code_96369_apartament_999()
-add_key_ois_apartament_999()
+add_apartament_998()
+add_code_23123_apartament_0()
+add_code_96369_apartament_0()
+add_key_ois_apartament_998()
