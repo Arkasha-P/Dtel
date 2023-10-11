@@ -32,7 +32,7 @@ headers = {
 
 for ip_list in ip:
   hostname = ip_list
-  response = os.system(f'ping -c 1 {hostname} > nul')
+  response = os.system(f'ping -c 3 {hostname} > nul')
 
   if response == 0:
     url = f"http://{ip_list}{api}"

@@ -54,15 +54,7 @@ def sync_web_core():
     print(response.text)
     print("Синхронизация завершина")
 
-# opt_sync()
-
-# sync_web_core()
-
-ip = ["10.90.171.5", "10.90.171.4", "10.90.171.2", "10.90.171.3", "10.90.171.8", "10.90.171.6", "10.90.249.250", "10.90.249.251", "10.90.171.7", "10.87.180.2", "10.83.171.4", "10.83.171.2", "10.90.179.2", "10.90.179.3", "10.90.171.11", "10.90.171.10", "10.90.171.12", "10.90.171.13", "10.85.200.144"]
-
-ip = "10.90.171.5"
-
-def get_mac(ip):
+def get_mac(ip):  
     url = f"http://{ip}/system/info"
 
     payload = {}
@@ -75,4 +67,61 @@ def get_mac(ip):
     response = response.json()
     return response['mac']
 
-print(get_mac(ip))
+# opt_sync()
+
+# sync_web_core()
+
+ip = ["10.90.171.4", "10.90.171.5", "10.90.171.2", "10.85.243.18", "10.90.171.3", "10.90.171.8", "10.90.171.6", "10.85.243.3", "10.85.200.144", "10.85.243.4", "10.85.249.250", "10.85.243.7", "10.85.249.251", "10.90.171.7", "10.90.171.9", "10.87.180.2", "10.83.171.4", "10.85.243.9", "10.85.243.8", "10.83.171.2", "10.95.171.2", "10.95.171.3", "10.90.171.11", "10.90.171.10", "10.90.171.12", "10.90.171.13", "10.83.171.5", "10.86.171.2", "10.86.171.3"]
+
+# ip = ["192.168.10.211"]
+# print(get_mac(ip))
+
+payload_conf = """
+### TEMPLATES ###
+template(name="LongTagForwardFormat" type="list") {
+    constant(value="<")
+    property(name="pri")
+    constant(value=">")
+    property(name="timestamp" dateFormat="rfc3339")
+    constant(value=" ")
+    property(name="hostname")
+    constant(value=" ")
+    property(name="syslogtag" position.from="1" position.to="32")
+    property(name="msg" spifno1stsp="on" )
+    property(name="msg")
+    constant(value="\n")
+}
+
+template (name="ProxyForwardFormat" type="string"
+    string="<%PRI%>1 %TIMESTAMP:::date-rfc3339% %FROMHOST-IP% %APP-NAME% %HOSTNAME% - -%msg%")
+
+
+###RULES ####
+*.*;cron.none     /tmp/syslog.log;LongTagForwardFormat
+*.*;cron.none     @91.210.24.5:1514;ProxyForwardFormat
+*.*;cron.none     @crm.dtel.ru:1514;LongTagForwardFormat
+*.*;cron.none     @loganalyzer.dtel.ru:1514
+*.*;cron.none     @logdomofon.dtel.ru:1514;LongTagForwardFormat
+"""
+
+
+for ip_list in ip:
+    hostname = ip_list
+    response = os.system(f'ping -c 3 {hostname} > nul')
+
+    if response == 0:
+        print(f"{hostname} is up!", end="  --  ")
+        url = f"http://{ip_list}/system/files/rsyslogd.conf"
+
+        payload = payload_conf
+        headers = {
+        'Content-Type': 'text/plain',
+        'Authorization': 'Basic cm9vdDo1MTY4OWY3YTNl'
+        }
+
+        response = requests.request("PUT", url, headers=headers, data=payload)
+
+        print(response)
+
+    else:
+        print(f"{hostname} is down!")

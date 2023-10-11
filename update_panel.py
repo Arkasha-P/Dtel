@@ -3,10 +3,12 @@ import json
 import time
 import sys
 
-address = "Сочи, ул. Тепличная 79 калитка 1"
-ip_panels = "192.168.10.119"
+address = "Сочи, ул."
+ip_panels = "192.168.10.211"
 ip_server_tftp = "192.168.10.247"
-url_update = "http://iscom.hues.top/X2/2.2.5.10.5"
+url_update = "http://iscom.hues.top/X2/2.2.5.8.10"
+
+authorization = 'Basic cm9vdDoxMjM0NTY='
 
 keys_ois = [
 "A3D8E16A",
@@ -19,6 +21,34 @@ keys_ois = [
 "6984badb"
 ]
 
+
+rsyslog = """
+### TEMPLATES ###
+template(name="LongTagForwardFormat" type="list") {
+    constant(value="<")
+    property(name="pri")
+    constant(value=">")
+    property(name="timestamp" dateFormat="rfc3339")
+    constant(value=" ")
+    property(name="hostname")
+    constant(value=" ")
+    property(name="syslogtag" position.from="1" position.to="32")
+    property(name="msg" spifno1stsp="on" )
+    property(name="msg")
+    constant(value="\n")
+}
+
+template (name="ProxyForwardFormat" type="string"
+    string="<%PRI%>1 %TIMESTAMP:::date-rfc3339% %FROMHOST-IP% %APP-NAME% %HOSTNAME% - -%msg%")
+
+
+###RULES ####
+*.*;cron.none     /tmp/syslog.log;LongTagForwardFormat
+*.*;cron.none     @91.210.24.5:1514;ProxyForwardFormat
+*.*;cron.none     @crm.dtel.ru:1514;LongTagForwardFormat
+*.*;cron.none     @loganalyzer.dtel.ru:1514
+*.*;cron.none     @logdomofon.dtel.ru:1514;LongTagForwardFormat
+"""
 
 def update_stage1():
 
@@ -35,7 +65,7 @@ def update_stage1():
     })
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY=',
+    'Authorization': authorization,
     'Cookie': 'PHPSESSID_TD_CRM=2ahncopu8d7878uv27p4bbmf99; _csrf=1a9b481a5e475988b41f5991c53739baf868885bb45cabe18e7b0f73f2d7810ca%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22gAY7alUi94lMxQxuacbWQeabjrBqpZjO%22%3B%7D; _identity=f236f7e09617f4beaf7878357688d69d7be7640c15935b049ca5fb38014c009da%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_identity%22%3Bi%3A1%3Bs%3A17%3A%22%5B20%2Cnull%2C2592000%5D%22%3B%7D'
     }
 
@@ -68,7 +98,7 @@ def update_stage2():
     })
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("PUT", url, headers=headers, data=payload)
@@ -87,13 +117,12 @@ def update_stage2():
 
 def update_config_rsyslogd():
 
-
     url = f"http://{ip_panels}/system/files/rsyslogd.conf"
 
-    payload = "### TEMPLATES ###\ntemplate(name=\"LongTagForwardFormat\" type=\"list\") {\n    constant(value=\"<\")\n    property(name=\"pri\")\n    constant(value=\">\")\n    property(name=\"timestamp\" dateFormat=\"rfc3339\")\n    constant(value=\" \")\n    property(name=\"hostname\")\n    constant(value=\" \")\n    property(name=\"syslogtag\" position.from=\"1\" position.to=\"32\")\n    property(name=\"msg\" spifno1stsp=\"on\" )\n    property(name=\"msg\")\n    constant(value=\"\\n\")\n}\n\ntemplate (name=\"ProxyForwardFormat\" type=\"string\"\n    string=\"<%PRI%>1 %TIMESTAMP:::date-rfc3339% %FROMHOST-IP% %APP-NAME% %HOSTNAME% - -%msg%\")\n\n\n###RULES ####\n\n*.*;cron.none     /tmp/syslog.log;LongTagForwardFormat\n*.*;cron.none     @91.210.24.5:1514;ProxyForwardFormat\n*.*;cron.none     @crm.dtel.ru:1514;LongTagForwardFormat\n*.*;cron.none     @loganalyzer.dtel.ru:1514"
+    payload = rsyslog
     headers = {
     'Content-Type': 'text/plain',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("PUT", url, headers=headers, data=payload)
@@ -107,7 +136,7 @@ def update_time_zone():
     payload = json.dumps({"tz": "Europe/Moscow"})
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("PUT", url, headers=headers, data=payload)
@@ -126,7 +155,7 @@ def off_W_B_mode():
 })
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("PUT", url, headers=headers, data=payload)
@@ -204,7 +233,7 @@ def add_label_address():
     ])
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("PUT", url, headers=headers, data=payload)
@@ -222,7 +251,7 @@ def update_5sec_open():
 
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("PUT", url, headers=headers, data=payload)
@@ -239,7 +268,7 @@ def turn_on_aac():
 
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("PUT", url, headers=headers, data=payload)
@@ -263,7 +292,7 @@ def turn_off_echoD():
 
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("PUT", url, headers=headers, data=payload)
@@ -284,7 +313,7 @@ def add_apartament_998():
 
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("post", url, headers=headers, data=payload)
@@ -302,7 +331,7 @@ def add_code_23123_apartament_0():
 
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("post", url, headers=headers, data=payload)
@@ -320,7 +349,7 @@ def add_code_96369_apartament_0():
 
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("post", url, headers=headers, data=payload)
@@ -348,7 +377,7 @@ def add_key_ois_apartament_998():
 
         headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic cm9vdDoxMjM0NTY='
+        'Authorization': authorization
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
@@ -373,16 +402,30 @@ def off_ddns():
     })
     headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    'Authorization': authorization
     }
 
     response = requests.request("PUT", url, headers=headers, data=payload)
 
     print(response.text)
 
+def change_pass():
+    url = f"http://{ip_panels}/user/change_password"
 
-# update_stage1()
-# update_stage2()
+    payload = json.dumps({
+    "newPassword": "51689f7a3e"
+})
+    headers = {
+    'Content-Type': 'application/json',
+    'Authorization': authorization
+    }
+
+    response = requests.request("PUT", url, headers=headers, data=payload)
+
+    print(response.text)
+
+update_stage1()
+update_stage2()
 update_config_rsyslogd()
 off_ddns()
 update_time_zone()
@@ -395,3 +438,4 @@ add_apartament_998()
 add_code_23123_apartament_0()
 add_code_96369_apartament_0()
 add_key_ois_apartament_998()
+change_pass()
