@@ -1,3 +1,7 @@
+"""
+Скрипт добавляет ключи в нужную квартиру с учетом особеностей дома и подъезда
+"""
+
 import requests
 import json
 from config import *
@@ -36,6 +40,8 @@ def set_tep75_gates():
 
 for key in keys:
 
+    # cycle_keys(key,num_home,apartment)
+    
     if num_home == 1 and 1 <= apartment <= 96:
         api_add_keys(MAC_ADRESS["mac_tep75_entrance_1"],key,apartment,"Дом 75 - подъезд 1");set_tep75_gates()
 
@@ -49,8 +55,8 @@ for key in keys:
         api_add_keys(MAC_ADRESS["mac_tep75_1_entrance_2"],key,apartment,"Дом 75/1 - подъезд 2");set_tep75_gates()
 
     if num_home == 3:
-        api_add_keys(MAC_ADRESS["mac_abr21_entrance_1"],key,apartment,"Виноградная 22/1В подъезд 1")
-        api_add_keys(MAC_ADRESS["mac_abr21_entrance_2"],key,apartment,"Виноградная 22/1В подъезд 1")
+        api_add_keys(MAC_ADRESS["mac_vin22_entrance_1"],key,apartment,"Виноградная 22/1В подъезд 1")
+        api_add_keys(MAC_ADRESS["mac_vin22_entrance_2"],key,apartment,"Виноградная 22/1В подъезд 2")
 
     if num_home == 4:
         api_add_keys(MAC_ADRESS["mac_abr21_entrance_1"],key,apartment,"Абрикосовая 21 подъезд 1")
@@ -88,6 +94,13 @@ for key in keys:
     
     if num_home == 9:
         api_add_keys(MAC_ADRESS["mac_dja4b_entranse_1"],key,apartment,"Джапаридзе 4В подъезд 1")
+
+    if num_home == 10 and 1 <= apartment <= 44:
+        api_add_keys(MAC_ADRESS["mac_hudak5_1_entranse_1"],key,apartment,"Худякова 5/1 подъезд 1")
+    
+    if num_home == 10 and 45 <= apartment <= 88:
+        api_add_keys(MAC_ADRESS["mac_hudak5_1_entranse_2"],key,apartment,"Худякова 5/1 подъезд 2")
+
 
 
 with keys as f:

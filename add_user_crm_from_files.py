@@ -253,9 +253,9 @@ with open(file, newline='') as f:
 
 add_user_apartament()
 
-opt_sync()
+# opt_sync()
 
-sync_web_core()
+# sync_web_core()
 
 '''
 Добавление пользователей в квартиры после создания аккаунтов

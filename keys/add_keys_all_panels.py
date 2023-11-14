@@ -26,5 +26,5 @@ for key in keys:
     key = key.replace('\n', '')
     for list in MAC_ADRESS.items():
         try:
-            api_add_keys(list[1],key,0,list[0])
+            api_add_keys(list[1],key,299,list[0])
         except: pass

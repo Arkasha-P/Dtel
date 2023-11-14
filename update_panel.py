@@ -3,12 +3,14 @@ import json
 import time
 import sys
 
-address = "Сочи, ул."
-ip_panels = "192.168.10.211"
+address = "Сочи, ул. Тест, 777 подъезд 666"
+ip_panels = "192.168.10.30"
 ip_server_tftp = "192.168.10.247"
-url_update = "http://iscom.hues.top/X2/2.2.5.8.10"
 
+# root/123456
 authorization = 'Basic cm9vdDoxMjM0NTY='
+
+Cookie = "_identity=f236f7e09617f4beaf7878357688d69d7be7640c15935b049ca5fb38014c009da%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_identity%22%3Bi%3A1%3Bs%3A17%3A%22%5B20%2Cnull%2C2592000%5D%22%3B%7D; _csrf=0553b1a9dcddc127c60ff98bde176b70dc1b8c4fb7e3622eb05949a3e18666eda%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22TyF8_Xuu8olKrcLbWn4T1vQnOnRnOjFI%22%3B%7D; PHPSESSID_TD_CRM=6l2c6mmor7lbmjut4bk5jntum4"
 
 keys_ois = [
 "A3D8E16A",
@@ -21,6 +23,25 @@ keys_ois = [
 "6984badb"
 ]
 
+keys_dtel = [
+"698D2E3B",
+"A3C5922A",
+"696318AB",
+"4670B627", 
+"69622D2B", 
+"4678F5E7", 
+"A3CD346A", 
+"E93A9AED", 
+"6968E98B", 
+"698EACAB", 
+"6962E33B", 
+"9E9FD73D", 
+"A2EEA7EA", 
+"7572DD11", 
+"697441CB",
+"69723A7B",
+"695EED0B"
+]
 
 rsyslog = """
 ### TEMPLATES ###
@@ -51,7 +72,7 @@ template (name="ProxyForwardFormat" type="string"
 """
 
 def update_stage1():
-
+    # update 2.5.7.23
     print("Обновление 1 этапа начато")
     url = f"http://{ip_panels}:8080/system/cam/upgrade"
 
@@ -82,11 +103,11 @@ def update_stage1():
         sys.stdout.flush()
         time.sleep(1)
 
-    sys.stdout.write("\rComplete!            \n")
+    sys.stdout.write("\rComplete!\n")
     print("Обновление 1 этапа завершино")
 
 def update_stage2():
-
+    url_update = "http://firmware.domofon-sokol.ru/X2/2.2.5.8.10"
     url = f"http://{ip_panels}/v2/system/upgrade"
 
     payload = json.dumps({
@@ -114,6 +135,68 @@ def update_stage2():
     sys.stdout.write("\rComplete!            \n")
 
     print("Обновление 2 этапа завершино")
+
+def update_stage3():
+
+    url_update = "http://firmware.domofon-sokol.ru/X2/2.2.5.9.0.1"
+    url = f"http://{ip_panels}/v2/system/upgrade"
+
+    payload = json.dumps({
+    "url": url_update,
+    "opt": True,
+    "media": True,
+    "rootfs": True,
+    "mcu": True
+    })
+    headers = {
+    'Content-Type': 'application/json',
+    'Authorization': authorization
+    }
+
+    response = requests.request("PUT", url, headers=headers, data=payload)
+
+    print(response.text)
+
+    for remaining in range(180, 0, -1):
+        sys.stdout.write("\r")
+        sys.stdout.write("{:d} seconds remaining.".format(remaining))
+        sys.stdout.flush()
+        time.sleep(1)
+
+    sys.stdout.write("\rComplete!            \n")
+
+    print("Обновление 3 этапа завершино")
+
+def update_stage4():
+
+    url_update = "http://firmware.domofon-sokol.ru/X2/2.2.5.10.5"
+    url = f"http://{ip_panels}/v2/system/upgrade"
+
+    payload = json.dumps({
+    "url": url_update,
+    "opt": True,
+    "media": True,
+    "rootfs": True,
+    "mcu": True
+    })
+    headers = {
+    'Content-Type': 'application/json',
+    'Authorization': authorization
+    }
+
+    response = requests.request("PUT", url, headers=headers, data=payload)
+
+    print(response.text)
+
+    for remaining in range(180, 0, -1):
+        sys.stdout.write("\r")
+        sys.stdout.write("{:d} seconds remaining.".format(remaining))
+        sys.stdout.flush()
+        time.sleep(1)
+
+    sys.stdout.write("\rComplete!            \n")
+
+    print("Обновление 4 этапа завершино")
 
 def update_config_rsyslogd():
 
@@ -320,6 +403,27 @@ def add_apartament_998():
 
     print(response.text)
 
+def add_apartament_997():
+
+    url = f"http://{ip_panels}:8080/panelCode"
+
+    payload = json.dumps({
+    "panelCode": 997,
+    "callsEnabled": {
+        "handset": True,
+        "sip": True
+    }
+})
+
+    headers = {
+    'Content-Type': 'application/json',
+    'Authorization': authorization
+    }
+
+    response = requests.request("post", url, headers=headers, data=payload)
+
+    print(response.text)
+
 def add_code_23123_apartament_0():
 
     url = f"http://{ip_panels}/openCode"
@@ -356,14 +460,9 @@ def add_code_96369_apartament_0():
 
     print(response.text)
 
-def add_key_ois_apartament_998():
+def add_key_dtel_apartament_997():
 
-    with open(r"txt/keys_ois.txt", "r") as f:
-        file = f.read().splitlines()
-
-    
-
-    for list_file in keys_ois:
+    for list_file in keys_dtel:
 
         print(list_file)
 
@@ -371,7 +470,7 @@ def add_key_ois_apartament_998():
 
         payload = json.dumps({
         "uuid": list_file,
-        "panelCode": 998,
+        "panelCode": 997,
         "encryption":False
         })
 
@@ -424,8 +523,70 @@ def change_pass():
 
     print(response.text)
 
-update_stage1()
-update_stage2()
+def add_key_ois_apartament_998():
+ 
+
+    for list_file in keys_ois:
+
+        print(list_file)
+
+        url = f"http://{ip_panels}/key/store"
+
+        payload = json.dumps({
+        "uuid": list_file,
+        "panelCode": 998,
+        "encryption":False
+        })
+
+        headers = {
+        'Content-Type': 'application/json',
+        'Authorization': authorization
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+
+        print(response.text)
+
+def get_mac(ip):
+    url = f"http://{ip}/system/info"
+
+    payload = {}
+    headers = {
+    'Authorization': 'Basic cm9vdDoxMjM0NTY='
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    response = response.json()
+    return response["mac"]
+
+def create_panel_in_CRM(mac,ip):
+    url = "https://crm.dtel.ru/front/device-list/create-device"
+
+    ip = f"http://{ip}"
+    payload = json.dumps({
+    "mac": mac,
+    "type": 6,
+    "url": ip,
+    "login": "root",
+    "password": "51689f7a3e"
+    })
+    headers = {
+    'Cookie': Cookie,
+    'Content-Type': 'application/json',
+    'Authorization': 'Basic YWRtaW46dTNXMmtiM25iQQ=='
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    print(response.text)
+
+
+
+# update_stage1()
+# update_stage2()
+update_stage3()
+update_stage4()
 update_config_rsyslogd()
 off_ddns()
 update_time_zone()
@@ -435,7 +596,10 @@ update_5sec_open()
 turn_on_aac()
 turn_off_echoD()
 add_apartament_998()
+add_apartament_997()
 add_code_23123_apartament_0()
 add_code_96369_apartament_0()
 add_key_ois_apartament_998()
+add_key_dtel_apartament_997()
+# create_panel_in_CRM(get_mac(ip_panels), ip_panels)
 change_pass()
